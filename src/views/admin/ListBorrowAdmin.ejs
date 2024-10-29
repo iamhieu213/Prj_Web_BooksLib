@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /> 
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed" style="overflow-x: hidden">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3 nav-link" href="/webtruyen/admin">TTV</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+            <i class="fas fa-bars"></i>
+        </button>
+        <form method="post" action="SearchBorrower"
+            class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                
+                
+            </div>
+        </form>
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="\img\avt1.jpg" alt="Avatar" class="avatar-img">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="/webtruyen/Logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="layoutSidenav">
+
+        <!-- Sidebar -->
+        <%- include('../admin/sidebar.ejs') %>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="main-box clearfix">
+                            <div class="table-responsive">
+                                <table class="table user-list">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"><span>ID</span></th>
+                                            <th class="text-center"><span>Username</span></th>
+                                            <th class="text-center"><span>Book Id</span></th>
+                                            <th class="text-center"><span>Status</span></th>
+                                            <th class="text-center"><span>Borrowed date</span></th>
+                                            <th class="text-center"><span>Return date</span></th>
+                                            <% if(action === 'Processing' || action === 'Borrow') { %>
+                                            <th class="text-center">Action</th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (var i = 0; i < listBook.rows.length; i++) { %>
+                                            <tr>
+                                                <td class="text-center"><%- listBook.rows[i].id %></td>
+                                                <td class="text-center"><p><%- listBook.rows[i].username %></p></td>
+                                                <td class="text-center"><%- listBook.rows[i].name %></td>
+                                                
+                                                <% if(listBook.rows[i].status === 'Processing') { %>
+                                                    <td class="text-center">
+                                                        <span class="text-warning"><%- listBook.rows[i].status %></span>
+                                                    </td>
+                                                <% } else if (listBook.rows[i].status === 'Returned'){ %> 
+                                                    <td class="text-center">
+                                                        <span class="text-alert"><%- listBook.rows[i].status %></span>
+                                                    </td>
+                                                <% } else if (listBook.rows[i].status === 'Borrowed'){ %>
+                                                    <td class="text-center">
+                                                        <span class="text-success"><%- listBook.rows[i].status %></span>
+                                                    </td>
+                                                <% } else { %>
+                                                    <td class="text-center">
+                                                        <span class="text-danger"><%- listBook.rows[i].status %></span>
+                                                    </td>  
+                                                <% } %>
+
+                                                <td class="text-center">
+                                                    <span class="text-alert">
+                                                        <%= moment(listBook.rows[i].form).format('YYYY-MM-DD') %>
+                                                    </span>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <%= moment(listBook.rows[i].to_date).format('YYYY-MM-DD') %>
+                                                </td>
+
+                                                <% if (action === 'Processing') { %>
+                                                    <td class="text-center">
+                                                        <form method="post" action="/webtruyen/ConfirmBorrowed">
+                                                            <input type="hidden" name="Id" value="<%= listBook.rows[i].id %>">
+                                                            <% if (listBook.rows[i].status === 'Borrowed') { %>
+                                                                <!-- Đã xác nhận cho mượn -->
+                                                                <button type="button" class="btn btn-link table-link" 
+                                                                    style="text-decoration: none; background-color: transparent;" 
+                                                                    title="Book Borrowed">
+                                                                    <i class="fas fa-check-square"></i>
+                                                                </button>
+                                                            <% } else { %>
+                                                                <!-- Chưa xác nhận cho mượn -->
+                                                                <button type="submit" class="btn btn-link table-link" 
+                                                                    style="text-decoration: none; background-color: transparent;" 
+                                                                    title="Confirm Borrowed">
+                                                                    <i class="far fa-square"></i>
+                                                                </button>
+                                                            <% } %>
+                                                        </form>
+                                                    </td>
+                                                <% } else if (action === 'Borrow') { %>
+                                                    <td class="text-center">
+                                                        <form method="post" action="/webtruyen/ConfirmReturned">
+                                                            <input type="hidden" name="Id" value="<%= listBook.rows[i].id %>">
+                                                            <% if (listBook.rows[i].status === 'Returned') { %>
+                                                                <!-- Đã trả sách -->
+                                                                <button type="button" class="btn btn-link table-link" 
+                                                                    style="text-decoration: none; background-color: transparent;" 
+                                                                    title="Book Returned">
+                                                                    <i class="fas fa-check-square"></i>
+                                                                </button>
+                                                            <% } else { %>
+                                                                <!-- Chưa trả sách -->
+                                                                <button type="submit" class="btn btn-link table-link" 
+                                                                    style="text-decoration: none; background-color: transparent;" 
+                                                                    title="Confirm Returned">
+                                                                    <i class="far fa-square"></i>
+                                                                </button>
+                                                            <% } %>
+                                                        </form>
+                                                    </td>
+                                                <% } %>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', event => {
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

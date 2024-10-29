@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "C:/xampp/htdocs/Library_management"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../testprj/Clothing_Store_Website"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "lms"
+	}
+}

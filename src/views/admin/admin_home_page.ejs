@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Admin Page</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/css/admin.css">
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body class="sb-nav-fixed" style="overflow-x: hidden">
+        <%- include('../admin/navbar.ejs') %>
+        <div id="layoutSidenav">
+            <%- include('../admin/sidebar.ejs') %>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Dashboard</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">
+                                        Total Book: <span style="font-size: 1.5rem" class="mx-2"></span>
+                                        <%- numberBooks %>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="ListBook">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Total User: <span style="font-size: 1.5rem" class="mx-2"></span><%- numberUsers %></div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="ListUser">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">List Book Borrowed: <span style="font-size: 1.5rem"></span><%- numberBooks_Borrowed %></div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="ListBorrowAdmin/Borrow">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">List Book Order: <span style="font-size: 1.5rem" class="mx-2"></span><%- numberProcess %></div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="ListBorrowAdmin/Processing">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        Top User Borrowed
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table user-list">
+
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><span>Username</span></th>
+                                                    <th class="text-center"><span>Total</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var i = 0 ; i <  topBorrower.rowCount ; i++) { %>
+                                                    <tr class=" bg ">
+                                                        <td class="text-center">
+                                                          <%= topBorrower.rows[i].username %>
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                          <%=  topBorrower.rows[i].borrow_count %>
+                                                        </td>
+                                                    <% } %>
+                                            </tbody>
+                                        </table></div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar me-1"></i>
+                                        Top borrowed books
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table user-list">
+
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><span>Book</span></th>
+                                                    <th class="text-center"><span>Total</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (var i = 0 ; i <  topBook.rowCount ; i++) { %>
+                                                    <tr class=" bg ">
+                                                        <td class="text-center">
+                                                          <%= topBook.rows[i].name %>
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                          <%=  topBook.rows[i].borrow_count %>
+                                                        </td>
+                                                    <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Footer -->
+                
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', event => {
+                const sidebarToggle = document.body.querySelector('#sidebarToggle');
+                if (sidebarToggle) {
+                    sidebarToggle.addEventListener('click', event => {
+                        event.preventDefault();
+                        document.body.classList.toggle('sb-sidenav-toggled');
+                        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                    });
+                }
+
+            });
+        </script>
+
+    </body>
+
+</html>

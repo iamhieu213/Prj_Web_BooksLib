@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Library</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/css/admin.css">
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body class="sb-nav-fixed" style="overflow-x: hidden">
+        <%- include('../admin/navbar.ejs') %>
+
+        <div id="layoutSidenav">
+            <%- include('../admin/sidebar.ejs') %>
+            <!-- Sidebar  -->
+        
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <section>
+                        <div class="container py-5">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="card mb-4">
+                                        <div class="card-body text-center">
+                                            <img src=""
+                                                 alt="avatar" class="rounded-circle img-fluid" style="width: 250px; height: 250px; object-fit: cover;">
+                                            <h5 class="my-3"></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <form action="UpdateUser" method="post" class="card mb-4">
+                                        <input type="hidden" name="username" value=""/>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Username</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="name" value="<%- userinfo.username %>" disabled/>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Firstname</p>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text" class="name" value ="<%- userinfo.firstname %>" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Lastname</p>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text" class="firstname" value ="<%- userinfo.lastname %>"disabled >
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Gender</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <% if( userinfo.sex.trim() == 'Nam') { %>
+                                                        <input class="form-check-input" type="radio" name="sex" value="true" id="flexRadioDefault1" checked disabled>
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                            Male
+                                                        </label>
+                                                        <input class="form-check-input" type="radio" name="sex" value="false" id="flexRadioDefault2" disabled>
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                            Female
+                                                        </label>
+                                                        <% }else{ %>
+                                                        <input class="form-check-input" type="radio" name="sex" value="true" id="flexRadioDefault1" disabled>
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                            Male
+                                                        </label>
+                                                        <input class="form-check-input" type="radio" name="sex" value="false" id="flexRadioDefault2" checked disabled>
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                            Female
+                                                        </label>
+                                                    <% } %>
+                                                    
+                                                    
+
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Date Birth</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input name="datebirth" type="date" value="<%= userinfo.datebirth.toISOString().split('T')[0] %>" disabled/>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Email</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input  name="gmail" type="email" value="<%- userinfo.email %>"  disabled/>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Footer -->
+                <%- include('../footer.ejs') %>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', event => {
+                const sidebarToggle = document.body.querySelector('#sidebarToggle');
+                if (sidebarToggle) {
+                    sidebarToggle.addEventListener('click', event => {
+                        event.preventDefault();
+                        document.body.classList.toggle('sb-sidenav-toggled');
+                        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                    });
+                }
+
+            });
+        </script>
+    </body>
+
+</html>

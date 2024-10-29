@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        /* CSS cho ô mật khẩu và biểu tượng khóa */
+        .password-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            padding-right: 30px;
+        }
+
+        .password-container .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="sb-nav-fixed" style="overflow-x: hidden">
+    <%- include('../admin/navbar.ejs') %>
+
+    <div id="layoutSidenav">
+        <!-- Sidebar -->
+        <%- include('../admin/sidebar.ejs') %>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="main-box clearfix">
+                            <div class="table-responsive">
+                                <table class="table user-list">
+                                    <thead>
+                                        <tr>
+                                            <th><span>User</span></th>
+                                            <th><span>Sex</span></th>
+                                            <th><span>Date of birth</span></th>
+                                            <th><span>Email</span></th>
+                                            <th><span>Password</span></th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (userList.rowCount === 0) { %>
+                                            <tr>
+                                                <td colspan="5">Không có người dùng nào để hiển thị.</td>
+                                            </tr>
+                                        <% } else { %>
+                                            <% for (var i = 0; i < userList.rowCount; i++) { %>
+                                                <tr>
+                                                    <td>
+                                                        <p><%- userList.rows[i].username %></p>
+                                                    </td>
+                                                    <td>
+                                                        <% if (userList.rows[i].sex && userList.rows[i].sex.trim() == 'Nam') { %>
+                                                            Nam
+                                                        <% } else { %>
+                                                            Nữ
+                                                        <% } %>
+                                                    </td>
+                                                    <td>
+                                                        <%= moment(userList.rows[i].datebirth).format('YYYY-MM-DD') %>
+                                                    </td>
+                                                    <td>
+                                                        <%- userList.rows[i].email %>
+                                                    </td>
+                                                    <td>
+                                                        <!-- Ô mật khẩu với nút khóa -->
+                                                        <div class="password-container">
+                                                            <input type="password" id="password-<%- userList.rows[i].username %>" value="<%- userList.rows[i].password %>" readonly>
+                                                            <span class="fa fa-lock toggle-password" onclick="togglePasswordVisibility('<%- userList.rows[i].username %>')"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 20%;">
+                                                        <a href="AdminViewUser/<%- userList.rows[i].username %>" class="table-link" style="text-decoration: none;" title="View Profile">
+                                                            <span class="fa-stack">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </span>
+                                                        </a>
+                                                        <form id="deleteForm_<%- userList.rows[i].username %>" action="/webtruyen/DeleteUser" method="POST" style="display: inline;">
+                                                            <input type="hidden" name="delusername" value="<%- userList.rows[i].username %>">
+                                                            <a href="#" class="table-link danger" style="text-decoration: none;" title="Delete Account"
+                                                               onclick="return confirmDelete('<%- userList.rows[i].username %>');">
+                                                                <span class="fa-stack">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </span>
+                                                            </a>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            <% } %>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer>
+                <!-- Bạn có thể thêm nội dung footer ở đây -->
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        // Chức năng ẩn/hiện mật khẩu
+        function togglePasswordVisibility(username) {
+            var passwordInput = document.getElementById('password-' + username);
+            var icon = passwordInput.nextElementSibling;
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-lock');
+                icon.classList.add('fa-unlock');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-unlock');
+                icon.classList.add('fa-lock');
+            }
+        }
+
+        // Chức năng xác nhận xóa tài khoản
+        function confirmDelete(username) {
+            if (confirm('Bạn có chắc chắn muốn xóa tài khoản: ' + username + '?')) {
+                var formId = 'deleteForm_' + username; 
+                document.getElementById(formId).submit();
+            }
+            return false;
+        }
+
+        // Sidebar toggle logic
+        window.addEventListener('DOMContentLoaded', event => {
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

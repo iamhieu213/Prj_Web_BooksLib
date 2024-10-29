@@ -1,0 +1,51 @@
+body {
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #f0f4f8; /* Màu nền trang nhẹ nhàng */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.forgot-password-container {
+    background-color: #ffffff; /* Màu nền khung đăng nhập */
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 400px;
+}
+
+.btn-color {
+    background-color: #007bff; /* Màu nút xác nhận */
+    color: white;
+}
+
+.btn-color:hover {
+    background-color: #0056b3; /* Màu nút khi hover */
+}
+
+header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+#back button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#back button a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#back button a:hover {
+    text-decoration: underline;
+}
+
+.input-group-text {
+    cursor: pointer;
+}
